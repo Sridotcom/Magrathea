@@ -52,6 +52,7 @@ double Fe_liquid2_array[][2] = {{0,1}, {1,7.95626}, {2,109.7}, {3,4.66}, {4,-0.0
 
 EOS *Fe_liquid2 = new EOS("Fe liquid (Anderson)", Fe_liquid2_array, sizeof(Fe_liquid2_array)/2/sizeof(Fe_liquid2_array[0][0]));
 
+
 // -----------------------------------
 // Alpha Iron (bcc), Dorogokupets et al. 2017, Scientific Reports 
 
@@ -91,14 +92,14 @@ EOS *Fe_hcp3 = new EOS("Fe hcp (Dorogokupets)", Fe_hcp3_array, sizeof(Fe_hcp3_ar
 // -----------------------------------
 // Iron-Silicate Alloy, 7 wt% silicate, Wicks et al. 2018, Science Advances.
 
-double Fe_7Si_array[][2] = {{0,2}, {1,7.02}, {2,136.2}, {3,5.97}, {5,mFe*0.93+mSi*0.07}};
+double Fe_7Si_array[][2] = { {0,2}, {1,7.02}, {2,136.2}, {3,5.97}, {5,mFe * 0.93 + mSi * 0.07}, {14, 1} };
 
 EOS *Fe_7Si = new EOS("Fe-7Si (Wicks)", Fe_7Si_array, sizeof(Fe_7Si_array)/2/sizeof(Fe_7Si_array[0][0]));
 
 // -----------------------------------
 // Iron-Silicate Alloy, 15 wt% silicate, Wicks et al. 2018, Science Advances.
 
-double Fe_15Si_array[][2] = {{0,2}, {1,6.784}, {2,227.9}, {3,4.74}, {5,mFe*0.85+mSi*0.15}};
+double Fe_15Si_array[][2] = { {0,2}, {1,6.784}, {2,227.9}, {3,4.74}, {5,mFe * 0.85 + mSi * 0.15}, {14,1} };
 
 EOS *Fe_15Si = new EOS("Fe-15Si (Wicks)", Fe_15Si_array, sizeof(Fe_15Si_array)/2/sizeof(Fe_15Si_array[0][0]));
 
@@ -227,7 +228,7 @@ EOS *Si_PREM = new EOS("Si (PREM)", "./tabulated/SiPREM.txt");
 
 // -----------------------------------
 // Silicate PREM BM2 extrapolation used in Zeng 2016
-double Si_BM2fit_array[][2] = {{0,0}, {1,25.223}, {2,206},{3,4},{5,mMg+mSi+3*mO}};
+double Si_BM2fit_array[][2] = { {0,0}, {1,25.223}, {2,206},{3,4},{5,mMg + mSi + 3 * mO}, {14, 5} };
 EOS *Si_BM2fit = new EOS("Si (PREM, Zeng)", Si_BM2fit_array, sizeof(Si_BM2fit_array)/2/sizeof(Si_BM2fit_array[0][0]));
 
 // -----------------------------------
@@ -251,6 +252,144 @@ double dTdP_Si_Dummy (double P, double T)
     return numeric_limits<double>::quiet_NaN();
   }
 }
+
+// ==========  Stixrude and Lithgow-Bertelloni 05 Materials  ================
+
+//----------------------------------------
+// Garnet, Mg-majorite, Mg3MgSiSi3O12
+double Majorite_array[][2] = { {0,0}, {1,114.32}, {2,165}, {3,4.2}, {5,4 * mMg + 4 * mSi + 12 * mO}, {7,788}, {8,1.01}, {9,1.4}, {10,0}, {14,20} };
+
+EOS* Majorite = new EOS("Majoritic Garnet (S-L)", Majorite_array, sizeof(Majorite_array) / 2 / sizeof(Majorite_array[0][0]));
+
+// Magnesiowustite, Wustite, FeO
+double Wustite_array[][2] = { {0,0}, {1,12.06}, {2,152}, {3,4.9}, {5, mFe +  mO}, {7,455}, {8,1.28}, {9,1.5}, {10,0}, {14,2} };
+
+EOS* Wustite = new EOS("Wustite", Wustite_array, sizeof(Wustite_array) / 2 / sizeof(Wustite_array[0][0]));
+
+// Magnesiowustite (mw), Periclase, MgO
+double Periclase_array[][2] = { {0,0}, {1,11.04}, {2,161}, {3,3.9}, {5, mMg + mO}, {7,773}, {8,1.5}, {9,1.5}, {10,0}, {14,2} };
+
+EOS* Periclase = new EOS("Periclase", Periclase_array, sizeof(Periclase_array) / 2 / sizeof(Periclase_array[0][0]));
+
+// Perovskite, Fe-perovskit, FeSiO3
+double Fe_perovskit_array[][2] = { {0,0}, {1,25.48}, {2,281}, {3,4.1}, {5, mFe + mSi + 3*mO}, {7,841}, {8,1.48}, {9,1.4}, {10,0}, {14,5} };
+
+EOS* Fe_perovskit = new EOS("Fe-perovskit", Fe_perovskit_array, sizeof(Fe_perovskit_array) / 2 / sizeof(Fe_perovskit_array[0][0]));
+
+// Perovskite (pv), Mg-perovskite, MgSiO3
+double Mg_perovskite_array[][2] = { {0,0}, {1,24.45}, {2,251}, {3,4.1}, {5, mMg + mSi + 3 * mO}, {7,1070}, {8,1.48}, {9,1.4}, {10,0}, {14,5} };
+
+EOS* Mg_perovskite = new EOS("Mg_Perovskite", Mg_perovskite_array, sizeof(Mg_perovskite_array) / 2 / sizeof(Mg_perovskite_array[0][0]));
+
+
+// Stishovite(st), Stishovite, SiO2
+double Stishovite_array[][2] = { {0,0}, {1,14.02}, {2,314}, {3,4.4}, {5,  mSi + 2 * mO}, {7,1044}, {8,1.34}, {9,2.4}, {10,0}, {14,3} };
+
+EOS* Stishovite = new EOS("Stishovite", Stishovite_array, sizeof(Stishovite_array) / 2 / sizeof(Stishovite_array[0][0]));
+
+
+// Garnet, Almandine, Fe3AlAlSi3O12
+double Almandine_array[][2] = { {0,0}, {1,115.43}, {2,177}, {3,4.1}, {5,  mFe + mAl + mAl + 3 * mSi + 12 * mO}, {7,823}, {8,1.08}, {9,0.4}, {10,0}, {14,20} };
+
+EOS* Almandine = new EOS("Almandine", Almandine_array, sizeof(Almandine_array) / 2 / sizeof(Almandine_array[0][0]));
+
+// Garnet (gt,mj), Pyrope, Mg3AlAlSi3O12
+double Pyrope_array[][2] = { {0,0}, {1,113.08}, {2,170}, {3,4.1}, {5, 3 * mMg + mAl + mAl + 3 * mSi + 12 * mO}, {7,823}, {8,1.01}, {9,1.4}, {10,0}, {14,20} };
+
+EOS* Pyrope = new EOS("Pyrope", Pyrope_array, sizeof(Pyrope_array) / 2 / sizeof(Pyrope_array[0][0]));
+
+
+// Akimotoite, Corundum, AlAlO3
+double Corundum_array[][2] = { {0,0}, {1,25.58}, {2,253}, {3,4.3}, {5, mAl + mAl + 3 * mO}, {7,933}, {8,1.32}, {9,1.3}, {10,0}, {14,5} };
+
+EOS* Corundum = new EOS("Corundum", Corundum_array, sizeof(Corundum_array) / 2 / sizeof(Corundum_array[0][0]));
+
+// Akimotoite (ak), Mg_akimotoite, MgSiO3
+double Mg_akimotoite_array[][2] = { {0,0}, {1,26.35}, {2,211}, {3,4.5}, {5, mMg + mSi + 3 * mO}, {7,850}, {8,1.18}, {9,1.3}, {10,0}, {14,5} };
+
+
+EOS* Mg_akimotoite = new EOS("Mg_akimotoite", Mg_akimotoite_array, sizeof(Mg_akimotoite_array) / 2 / sizeof(Mg_akimotoite_array[0][0]));
+
+// HP-clinopyroxene, HP-clinoferrosilite, Fe4Si4O12
+double HP_clinoferrosilite_array[][2] = {{0,0}, {1,128.10}, {2,107}, {3,5.3}, {5, 4*mFe+ 4*mSi + 12 * mO}, {7,617}, {8,0.95}, {9,1.1}, {10,0}, {14,20} };
+
+
+EOS* HP_clinoferrosilite = new EOS("HP_clinoferrosilite", HP_clinoferrosilite_array, sizeof(HP_clinoferrosilite_array) / 2 / sizeof(HP_clinoferrosilite_array[0][0]));
+
+// HP-clinopyroxene (hpcpx), HP-clinoenstatite, Mg4Si4O12
+double HP_clinoenstatite_array[][2] = { {0,0}, {1,121.94}, {2,107}, {3,5.3}, {5, 4 * mMg + 4 * mSi + 12 * mO}, {7,768}, {8,0.95}, {9,1.1}, {10,0}, {14,20} };
+
+
+EOS* HP_clinoenstatite = new EOS("HP_clinoenstatite", HP_clinoenstatite_array, sizeof(HP_clinoenstatite_array) / 2 / sizeof(HP_clinoenstatite_array[0][0]));
+
+// Clinopyroxene, Hedenbergite, Ca2Fe2Si4O12
+double Hedenbergite_array[][2] = { {0,0}, {1,135.73}, {2,119}, {3,5.2}, {5, 2 * mCa + 2 * mFe + 2 * mSi + 12 * mO}, {7,702}, {8,0.93}, {9,1.5}, {10,0}, {14,20} };
+
+
+EOS* Hedenbergite = new EOS("Hedenbergite", Hedenbergite_array, sizeof(Hedenbergite_array) / 2 / sizeof(Hedenbergite_array[0][0]));
+
+// Clinopyroxene (cpx), Diopside, Ca2Mg2Si4O12
+double Diopside_array[][2] = { {0,0}, {1,132.08}, {2,112}, {3,5.2}, {5, 2 * mCa + 2 * mMg + 2 * mSi + 12 * mO}, {7,782}, {8,0.96}, {9,1.5}, {10,0}, {14,20} };
+
+
+EOS* Diopside = new EOS("Diposide", Diopside_array, sizeof(Diopside_array) / 2 / sizeof(Diopside_array[0][0]));
+
+// Orthopyroxene, Ferrosilite, Fe4Si4O12
+double Ferrosilite_array[][2] = { {0,0}, {1,131.88}, {2,101}, {3,7.1}, {5, 4 * mFe + 4 * mSi + 12 * mO}, {7,680}, {8,0.67}, {9,7.8}, {10,0}, {14,20} };
+
+
+EOS* Ferrosilite = new EOS("Ferrosilite", Ferrosilite_array, sizeof(Ferrosilite_array) / 2 / sizeof(Ferrosilite_array[0][0]));
+
+// Orhopyroxene (opx), Enstatite, Mg4Si4O12
+double Enstatite_array[][2] = { {0,0}, {1,125.35}, {2,107}, {3,7.1}, {5, 4 * mMg + 4 * mSi + 12 * mO}, {7,810}, {8,0.67}, {9,7.8}, {10,0}, {14,20} };
+
+
+EOS* Enstatite = new EOS("Enstatite", Enstatite_array, sizeof(Enstatite_array) / 2 / sizeof(Enstatite_array[0][0]));
+
+
+// Ringwoodite, Fe_ringwoodite, Fe2SiO4
+double Fe_ringwoodite_array[][2] = { {0,0}, {1,42.03}, {2,218}, {3,4.1}, {5, 2 * mFe + mSi + 4 * mO}, {7,685}, {8,1.30}, {9,2.8}, {10,0}, {14,7} };
+
+
+EOS* Fe_ringwoodite = new EOS("Fe_ringwoodite", Fe_ringwoodite_array, sizeof(Fe_ringwoodite_array) / 2 / sizeof(Fe_ringwoodite_array[0][0]));
+
+// Ringwoodite (ri), Mg-ringwoodite, Mg2SiO4
+double Mg_ringwoodite_array[][2] = { {0,0}, {1,39.49}, {2,183}, {3,4.1}, {5, 2 * mMg + mSi + 4 * mO}, {7,908}, {8,1.10}, {9,2.8}, {10,0}, {14,7} };
+
+
+EOS* Mg_ringwoodite = new EOS("Mg_ringwoodite", Mg_ringwoodite_array, sizeof(Mg_ringwoodite_array) / 2 / sizeof(Mg_ringwoodite_array[0][0]));
+
+// Wadsleyite, Fe-wadsleyite, Fe2SiO4
+double Fe_wadsleyite_array[][2] = { {0,0}, {1,43.21}, {2,169}, {3,4.3}, {5, 2 * mFe + mSi + 4 * mO}, {7,599}, {8,1.22}, {9,2.0}, {10,0}, {14,7} };
+
+
+EOS* Fe_wadsleyite = new EOS("Fe_wadsleyite", Fe_wadsleyite_array, sizeof(Fe_wadsleyite_array) / 2 / sizeof(Fe_wadsleyite_array[0][0]));
+
+// Wadsleyite (wa), Mg-wadsleyite, Mg2SiO4
+double Mg_wadsleyite_array[][2] = { {0,0}, {1,40.51}, {2,169}, {3,4.3}, {5, 2 * mMg + mSi + 4 * mO}, {7,881}, {8,1.22}, {9,2.0}, {10,0}, {14,7} };
+
+
+EOS* Mg_wadsleyite = new EOS("Mg_wadsleyite", Mg_wadsleyite_array, sizeof(Mg_wadsleyite_array) / 2 / sizeof(Mg_wadsleyite_array[0][0]));
+
+
+// Olivine, Fayalite, Fe2SiO4
+double Fayalite_array[][2] = { {0,0}, {1,46.29}, {2,135}, {3,4.2}, {5, 2 * mFe + mSi + 4 * mO}, {7,619}, {8,1.06}, {9,3.6}, {10,0}, {14,7} };
+
+
+EOS* Fayalite = new EOS("Fayalite", Fayalite_array, sizeof(Fayalite_array) / 2 / sizeof(Fayalite_array[0][0]));
+
+
+// Olivine (ol), Forsterite, Mg2SiO4
+double Forsterite_array[][2] = { {0,0}, {1,43.60}, {2,128}, {3,4.2}, {5, 2 * mMg + mSi + 4 * mO}, {7,809}, {8,0.99}, {9,2.1}, {10,0}, {14,7} };
+
+EOS* Forsterite = new EOS("Forsterite", Forsterite_array, sizeof(Forsterite_array) / 2 / sizeof(Forsterite_array[0][0]));
+
+
+// Feldspar (plg), Anorthite, CaAl2Si2O8
+double Anorthite_array[][2] = { {0,0}, {1,100.61}, {2,84}, {3,4.0}, {5, mCa + 2 * mAl + 2* mSi + 8 * mO}, {7,752}, {8,0.39}, {9,1.0}, {10,0}, {14,13} };
+
+EOS* Anorthite = new EOS("Anorthite", Anorthite_array, sizeof(Anorthite_array) / 2 / sizeof(Anorthite_array[0][0]));
+
 
 // ==========  Water  ================
 
